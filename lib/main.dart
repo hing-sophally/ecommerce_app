@@ -19,8 +19,13 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Poppins',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const FlashScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const FlashScreen(),
+        '/home': (context) => const HomePage(user: '',),  // <-- Define HomeScreen route here
+      },
     );
+
   }
 }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:testing/repositories/auth_repository.dart';
+import 'package:testing/screens/home_screen.dart';
 import 'package:testing/screens/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,10 +22,43 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _login() {
+  void _login() async {
     final email = _emailController.text;
     final password = _passwordController.text;
-    print('Email: $email, Password: $password');
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter email and password')),
+      );
+      return;
+    }
+
+    final result = await login(email, password);
+
+    if (result['success']) {
+      print('Token: ${result['token']}');
+      print('User: ${result['user']}');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login successful!')),
+      );
+
+      // ✅ Navigate to HomeScreen
+      if (result['success']) {
+        final user = result['user']; // assuming this is a Map with user info
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(user: email),
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result['message'] ?? 'Login failed')),
+      );
+    }
   }
 
   @override

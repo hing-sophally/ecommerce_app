@@ -5,7 +5,7 @@ class AuthRepository {
   final String _authority = '10.0.2.2:8000'; // Note: Use without http:// in Uri.http
 
   Future<String?> register({
-    required String name,       // Add name here
+    required String name, // Add name here
     required String email,
     required String password,
   }) async {
@@ -16,7 +16,7 @@ class AuthRepository {
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'name': name,          // send name to API
+          'name': name, // send name to API
           'email': email,
           'password': password,
         }),
@@ -36,6 +36,35 @@ class AuthRepository {
       print('Error: $e');
       print('Stacktrace: $stacktrace');
       return 'An error occurred: $e';
+    }
+  }
+
+  Future<Map<String, dynamic>> loginApi({
+    required String email,
+    required String password,
+  }) async {
+    final url = Uri.http('10.0.2.2:8000', '/api/login');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+      return {
+        'status': response.statusCode,
+        'data': data,
+      };
+    } catch (e) {
+      return {
+        'status': 500,
+        'data': {'message': 'An error occurred: $e'},
+      };
     }
   }
 }

@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:testing/screens/user_profile.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required String user});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -120,6 +121,7 @@ class _HomePageState extends State<HomePage> {
             // Sliver AppBar
             SliverAppBar(
               pinned: true,
+              leading: SizedBox.shrink(),
               backgroundColor: const Color(0xffe17ffa),
               expandedHeight: 70.0,
               flexibleSpace: const FlexibleSpaceBar(
@@ -132,15 +134,21 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 titlePadding: EdgeInsets.only(left: 16, bottom: 16),
+
               ),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.account_circle, color: Colors.white),
                   onPressed: () {
-                    print("Account icon tapped");
+                    // Navigate to UserProfile page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UserProfile(user: {},)),
+                    );
                   },
                 ),
               ],
+
             ),
 
             // Banner Slider
